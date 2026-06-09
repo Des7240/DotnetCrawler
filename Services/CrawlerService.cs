@@ -107,11 +107,13 @@ namespace DotnetCrawler.Services
                         var href = a.GetAttributeValue("href", "");
                         if (!string.IsNullOrEmpty(href))
                         {
+                            href = System.Net.WebUtility.HtmlDecode(href);
                             var imgUrl = href.StartsWith("http") ? href : new Uri(new Uri(baseUrl), href).ToString();
                             var mediaHref = a.GetAttributeValue("data-lb-sidebar-href", "");
                             string? mediaUrl = null;
                             if (!string.IsNullOrEmpty(mediaHref))
                             {
+                                mediaHref = System.Net.WebUtility.HtmlDecode(mediaHref);
                                 mediaUrl = new Uri(new Uri(baseUrl), mediaHref.Split('?')[0]).ToString();
                             }
                             imagesDict[imgUrl] = mediaUrl;
@@ -128,6 +130,8 @@ namespace DotnetCrawler.Services
                         if (string.IsNullOrEmpty(src) || src.StartsWith("data:image")) 
                             src = img.GetAttributeValue("data-src", "");
 
+                        src = System.Net.WebUtility.HtmlDecode(src);
+
                         if (!string.IsNullOrEmpty(src) && !src.Contains("smilies"))
                         {
                             var imgUrl = src.StartsWith("http") ? src : new Uri(new Uri(baseUrl), src).ToString();
@@ -142,6 +146,7 @@ namespace DotnetCrawler.Services
                 if (nextBtn != null)
                 {
                     var nextHref = nextBtn.GetAttributeValue("href", "");
+                    nextHref = System.Net.WebUtility.HtmlDecode(nextHref);
                     url = new Uri(new Uri(baseUrl), nextHref).ToString();
                 }
                 else
