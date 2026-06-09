@@ -15,20 +15,25 @@ namespace DotnetCrawler.Controllers
         }
 
         [HttpPost]
-        public IActionResult StartCrawl([FromBody] CrawlerRequest request)
+        public async Task<IActionResult> StartCrawl([FromBody] CrawlerRequest request)
         {
             if (request == null || request.Threads == null || !request.Threads.Any())
             {
                 return BadRequest(new { status = "error", message = "Dữ liệu không hợp lệ." });
             }
 
-            // Kích hoạt tiến trình chạy ngầm
-            _crawlerService.StartCrawlBackground(request);
-
-            return Ok(new { 
-                status = "success", 
-                message = "Tiến trình Crawl đã được kích hoạt chạy ngầm. Vui lòng theo dõi Console." 
-            });
+            try
+            {
+                await _crawlerService.StartCrawlAsync(request);
+                return Ok(new { 
+                    status = "success", 
+                    message = "Đã hoàn tất Crawl và lưu dữ liệu thành công." 
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { status = "error", message = ex.Message });
+            }
         }
     }
 }

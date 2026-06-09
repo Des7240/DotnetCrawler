@@ -26,10 +26,9 @@ namespace DotnetCrawler.Services
             _storageService = storageService;
         }
 
-        public void StartCrawlBackground(CrawlerRequest request)
+        public async Task StartCrawlAsync(CrawlerRequest request)
         {
-            // Bắn một task chạy ngầm không chặn luồng chính
-            Task.Run(async () => await ProcessCrawlAsync(request));
+            await ProcessCrawlAsync(request);
         }
 
         private async Task ProcessCrawlAsync(CrawlerRequest request)
@@ -56,14 +55,7 @@ namespace DotnetCrawler.Services
 
             foreach (var threadUrl in request.Threads)
             {
-                try
-                {
-                    await CrawlThreadAsync(client, retryPolicy, request.Base, threadUrl);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"[Crawler] Lỗi khi crawl thread {threadUrl}: {ex.Message}");
-                }
+                await CrawlThreadAsync(client, retryPolicy, request.Base, threadUrl);
             }
 
             Console.WriteLine("=== HOÀN TẤT CRAWL BACKGROUND ===");
@@ -82,8 +74,7 @@ namespace DotnetCrawler.Services
                 
                 if (!response.IsSuccessStatusCode)
                 {
-                    Console.WriteLine($"[Crawler] Lỗi tải trang: {response.StatusCode}");
-                    break;
+                    throw new Exception($"Lỗi tải trang: {response.StatusCode}. URL: {url}");
                 }
 
                 var html = await response.Content.ReadAsStringAsync();
@@ -94,8 +85,7 @@ namespace DotnetCrawler.Services
                 var titleNode = doc.DocumentNode.SelectSingleNode("//title");
                 if (titleNode != null && (titleNode.InnerText.Contains("Just a moment") || titleNode.InnerText.Contains("Cloudflare")))
                 {
-                    Console.WriteLine("CẢNH BÁO: Bị Cloudflare chặn!");
-                    break;
+                    throw new Exception("CẢNH BÁO: Bị Cloudflare chặn! Vui lòng cập nhật Cookie xf_session và User-Agent mới.");
                 }
 
                 // Parse ảnh
