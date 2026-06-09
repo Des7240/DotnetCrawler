@@ -121,8 +121,6 @@ D:\Craw\DotnetCrawler\obj\Debug\net9.0\rjimswa.dswa.cache.json
 D:\Craw\DotnetCrawler\obj\Debug\net9.0\rjsmrazor.dswa.cache.json
 D:\Craw\DotnetCrawler\obj\Debug\net9.0\rjsmcshtml.dswa.cache.json
 D:\Craw\DotnetCrawler\obj\Debug\net9.0\scopedcss\bundle\DotnetCrawler.styles.css
-D:\Craw\DotnetCrawler\obj\Debug\net9.0\compressed\425yb24i8t-pmlu91mi49.gz
-D:\Craw\DotnetCrawler\obj\Debug\net9.0\compressed\0uvyy9yrbt-pbaofqril2.gz
 D:\Craw\DotnetCrawler\obj\Debug\net9.0\staticwebassets.build.json
 D:\Craw\DotnetCrawler\obj\Debug\net9.0\staticwebassets.build.json.cache
 D:\Craw\DotnetCrawler\obj\Debug\net9.0\staticwebassets.development.json
@@ -135,5 +133,9 @@ D:\Craw\DotnetCrawler\obj\Debug\net9.0\DotnetCrawler.genruntimeconfig.cache
 D:\Craw\DotnetCrawler\obj\Debug\net9.0\ref\DotnetCrawler.dll
 D:\Craw\DotnetCrawler\bin\Debug\net9.0\Npgsql.dll
 D:\Craw\DotnetCrawler\bin\Debug\net9.0\Npgsql.EntityFrameworkCore.PostgreSQL.dll
-D:\Craw\DotnetCrawler\obj\Debug\net9.0\compressed\sg82t5dgtw-3ueky9zafn.gz
-D:\Craw\DotnetCrawler\obj\Debug\net9.0\compressed\rlu73jy9k8-ya9al3gub3.gz
+D:\Craw\DotnetCrawler\obj\Debug\net9.0\DotnetCrawler.sourcelink.json
+D:\Craw\DotnetCrawler\bin\Debug\net9.0\Microsoft.AspNetCore.OData.dll
+D:\Craw\DotnetCrawler\bin\Debug\net9.0\Microsoft.OData.Core.dll
+D:\Craw\DotnetCrawler\bin\Debug\net9.0\Microsoft.OData.Edm.dll
+D:\Craw\DotnetCrawler\bin\Debug\net9.0\Microsoft.OData.ModelBuilder.dll
+D:\Craw\DotnetCrawler\bin\Debug\net9.0\Microsoft.Spatial.dll
