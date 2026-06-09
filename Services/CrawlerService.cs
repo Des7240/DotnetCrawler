@@ -13,6 +13,7 @@ namespace DotnetCrawler.Services
         public List<string> Threads { get; set; } = new List<string>();
         public string XfUser { get; set; } = string.Empty;
         public string XfSession { get; set; } = string.Empty;
+        public string CfClearance { get; set; } = string.Empty;
     }
 
     public class CrawlerService
@@ -37,7 +38,11 @@ namespace DotnetCrawler.Services
 
             var handler = new HttpClientHandler { UseCookies = false };
             using var client = new HttpClient(handler);
-            client.DefaultRequestHeaders.Add("Cookie", $"xf_user={request.XfUser}; xf_session={request.XfSession}");
+            var cookieHeader = $"xf_user={request.XfUser}; xf_session={request.XfSession}";
+            if (!string.IsNullOrEmpty(request.CfClearance)) {
+                cookieHeader += $"; cf_clearance={request.CfClearance}";
+            }
+            client.DefaultRequestHeaders.Add("Cookie", cookieHeader);
             client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36");
             client.DefaultRequestHeaders.Add("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8");
             client.DefaultRequestHeaders.Add("Accept-Language", "en-US,en;q=0.9,vi;q=0.8");
@@ -100,9 +105,9 @@ namespace DotnetCrawler.Services
                     foreach (var a in anchorTags)
                     {
                         var href = a.GetAttributeValue("href", "");
-                        if (href.Contains("/attachments/"))
+                        if (!string.IsNullOrEmpty(href))
                         {
-                            var imgUrl = new Uri(new Uri(baseUrl), href).ToString();
+                            var imgUrl = href.StartsWith("http") ? href : new Uri(new Uri(baseUrl), href).ToString();
                             var mediaHref = a.GetAttributeValue("data-lb-sidebar-href", "");
                             string? mediaUrl = null;
                             if (!string.IsNullOrEmpty(mediaHref))
@@ -119,10 +124,13 @@ namespace DotnetCrawler.Services
                 {
                     foreach (var img in imgTags)
                     {
-                        var src = img.GetAttributeValue("src", "") ?? img.GetAttributeValue("data-src", "");
-                        if (src.Contains("/attachments/"))
+                        var src = img.GetAttributeValue("src", "");
+                        if (string.IsNullOrEmpty(src) || src.StartsWith("data:image")) 
+                            src = img.GetAttributeValue("data-src", "");
+
+                        if (!string.IsNullOrEmpty(src) && !src.Contains("smilies"))
                         {
-                            var imgUrl = new Uri(new Uri(baseUrl), src).ToString();
+                            var imgUrl = src.StartsWith("http") ? src : new Uri(new Uri(baseUrl), src).ToString();
                             if (!imagesDict.ContainsKey(imgUrl))
                                 imagesDict[imgUrl] = null;
                         }

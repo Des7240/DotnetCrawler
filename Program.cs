@@ -13,17 +13,9 @@ var builder = WebApplication.CreateBuilder(args);
 Env.Load();
 
 // Config Database
-var connectionString = Environment.GetEnvironmentVariable("POSTGRES_CONNECTION_STRING") 
-    ?? builder.Configuration.GetConnectionString("DefaultConnection");
-
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    if (string.IsNullOrEmpty(connectionString))
-    {
-        throw new InvalidOperationException("POSTGRES_CONNECTION_STRING is not configured.");
-    }
-    
-    options.UseNpgsql(connectionString);
+    options.UseInMemoryDatabase("CrawlerDbTest");
 });
 
 // Register Services
@@ -78,18 +70,18 @@ app.UseResponseCaching();
 app.UseAuthorization();
 app.MapControllers();
 
-// Auto Migrate (only run this carefully in prod)
+// Auto Create In-Memory DB
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     try 
     {
-        db.Database.Migrate();
-        Console.WriteLine("Database Migrated Successfully.");
+        db.Database.EnsureCreated();
+        Console.WriteLine("In-Memory Database Ready.");
     }
     catch (Exception ex)
     {
-        Console.WriteLine($"Migration Failed: {ex.Message}");
+        Console.WriteLine($"DB Creation Failed: {ex.Message}");
     }
 }
 

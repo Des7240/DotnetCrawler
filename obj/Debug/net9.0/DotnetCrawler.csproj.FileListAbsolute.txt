@@ -139,3 +139,4 @@ D:\Craw\DotnetCrawler\bin\Debug\net9.0\Microsoft.OData.Core.dll
 D:\Craw\DotnetCrawler\bin\Debug\net9.0\Microsoft.OData.Edm.dll
 D:\Craw\DotnetCrawler\bin\Debug\net9.0\Microsoft.OData.ModelBuilder.dll
 D:\Craw\DotnetCrawler\bin\Debug\net9.0\Microsoft.Spatial.dll
+D:\Craw\DotnetCrawler\bin\Debug\net9.0\Microsoft.EntityFrameworkCore.InMemory.dll
