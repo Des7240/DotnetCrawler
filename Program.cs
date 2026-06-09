@@ -13,9 +13,12 @@ var builder = WebApplication.CreateBuilder(args);
 Env.Load();
 
 // Config Database
+var connectionString = Environment.GetEnvironmentVariable("POSTGRES_CONNECTION_STRING") 
+                       ?? builder.Configuration.GetConnectionString("DefaultConnection");
+
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    options.UseInMemoryDatabase("CrawlerDbTest");
+    options.UseNpgsql(connectionString);
 });
 
 // Register Services
@@ -70,18 +73,18 @@ app.UseResponseCaching();
 app.UseAuthorization();
 app.MapControllers();
 
-// Auto Create In-Memory DB
+// Auto Migrate Database
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     try 
     {
-        db.Database.EnsureCreated();
-        Console.WriteLine("In-Memory Database Ready.");
+        db.Database.Migrate();
+        Console.WriteLine("PostgreSQL Database Migrated Successfully.");
     }
     catch (Exception ex)
     {
-        Console.WriteLine($"DB Creation Failed: {ex.Message}");
+        Console.WriteLine($"DB Migration Failed: {ex.Message}");
     }
 }
 
