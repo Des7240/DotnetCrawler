@@ -35,13 +35,9 @@ namespace DotnetCrawler.Services
         {
             Console.WriteLine("=== BẮT ĐẦU CRAWL BACKGROUND ===");
 
-            var cookieContainer = new System.Net.CookieContainer();
-            var baseUri = new Uri(request.Base);
-            cookieContainer.Add(baseUri, new System.Net.Cookie("xf_user", request.XfUser));
-            cookieContainer.Add(baseUri, new System.Net.Cookie("xf_session", request.XfSession));
-
-            var handler = new HttpClientHandler { CookieContainer = cookieContainer };
+            var handler = new HttpClientHandler { UseCookies = false };
             using var client = new HttpClient(handler);
+            client.DefaultRequestHeaders.Add("Cookie", $"xf_user={request.XfUser}; xf_session={request.XfSession}");
             client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36");
             client.DefaultRequestHeaders.Add("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8");
             client.DefaultRequestHeaders.Add("Accept-Language", "en-US,en;q=0.9,vi;q=0.8");
