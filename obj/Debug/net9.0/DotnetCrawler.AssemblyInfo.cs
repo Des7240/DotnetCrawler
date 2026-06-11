@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DotnetCrawler")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8884df749402ddf1a3998ab899692a9e0bf97436")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+dea1fec4a853754af5a6cf945e7886aeb667dccb")]
 [assembly: System.Reflection.AssemblyProductAttribute("DotnetCrawler")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DotnetCrawler")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

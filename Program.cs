@@ -24,7 +24,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // Register Services
 builder.Services.AddHttpClient<StorageService>();
 builder.Services.AddSingleton<CrawlerService>();
-
+builder.Services.AddSingleton<DataImporterService>();
 
 
 // Define EDM Model for OData
@@ -33,9 +33,12 @@ IEdmModel GetEdmModel()
     var odataBuilder = new ODataConventionModelBuilder();
     odataBuilder.EntitySet<Subject>("Subjects");
     odataBuilder.EntitySet<CourseThread>("CourseThreads");
-    odataBuilder.EntitySet<QuestionDto>("Questions");
+    odataBuilder.EntitySet<Question>("Questions");
     odataBuilder.EntitySet<Comment>("Comments");
     odataBuilder.EntitySet<ThreadFile>("ThreadFiles");
+    odataBuilder.EntitySet<AppUser>("AppUsers");
+    odataBuilder.EntitySet<QuestionVote>("QuestionVotes");
+    odataBuilder.EntitySet<CommentVote>("CommentVotes");
     return odataBuilder.GetEdmModel();
 }
 

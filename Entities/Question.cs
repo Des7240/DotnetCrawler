@@ -19,6 +19,8 @@ namespace DotnetCrawler.Entities
         [Column(TypeName = "TEXT")]
         public string? GeminiAnswer { get; set; }
 
+        public int Votes { get; set; } = 0;
+
         [ForeignKey("CourseThread")]
         public int CourseThreadId { get; set; }
         public CourseThread? CourseThread { get; set; }

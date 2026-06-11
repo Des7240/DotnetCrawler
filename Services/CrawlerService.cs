@@ -80,8 +80,6 @@ namespace DotnetCrawler.Services
             while (!string.IsNullOrEmpty(url))
             {
                 Console.WriteLine($"[Crawler] Đang tải trang: {url}");
-                // Thêm delay ngẫu nhiên 6-12 giây trước khi tải trang html để giả lập người dùng
-                await Task.Delay(Random.Shared.Next(6000, 12000));
                 var response = await retryPolicy.ExecuteAsync(() => client.GetAsync(url));
                 
                 if (!response.IsSuccessStatusCode)
@@ -195,13 +193,11 @@ namespace DotnetCrawler.Services
             }
 
             var imageList = imagesDict.ToList();
-            // Giảm mức độ song song xuống thấp để tránh bị phát hiện tải file hàng loạt
-            var parallelOptions = new ParallelOptions { MaxDegreeOfParallelism = 2 };
+            // Tối đa hóa băng thông an toàn cho Render Free Tier (tránh tràn RAM)
+            var parallelOptions = new ParallelOptions { MaxDegreeOfParallelism = 15 };
 
             await Parallel.ForEachAsync(imageList, parallelOptions, async (kvp, ct) =>
             {
-                // Thêm delay ngẫu nhiên 3-6 giây trước mỗi lượt tải ảnh
-                await Task.Delay(Random.Shared.Next(3000, 6000), ct);
                 var imgLink = kvp.Key;
                 var mediaUrl = kvp.Value;
                 var idx = imageList.IndexOf(kvp);
@@ -230,7 +226,6 @@ namespace DotnetCrawler.Services
 
                     if (!string.IsNullOrEmpty(mediaUrl))
                     {
-                        await Task.Delay(Random.Shared.Next(2000, 4000), ct); // Thêm delay trước khi tải trang bình luận
                         var mRes = await retryPolicy.ExecuteAsync(() => client.GetAsync(mediaUrl));
                         var mHtml = await mRes.Content.ReadAsStringAsync();
                         var mDoc = new HtmlDocument();

@@ -14,6 +14,10 @@ namespace DotnetCrawler.Data
         public DbSet<Question> Questions { get; set; } = null!;
         public DbSet<Comment> Comments { get; set; } = null!;
         public DbSet<ThreadFile> ThreadFiles { get; set; } = null!;
+        public DbSet<AppUser> AppUsers { get; set; } = null!;
+        public DbSet<QuestionVote> QuestionVotes { get; set; } = null!;
+        public DbSet<CommentVote> CommentVotes { get; set; } = null!;
+        public DbSet<SystemSetting> SystemSettings { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -29,6 +33,18 @@ namespace DotnetCrawler.Data
 
             modelBuilder.Entity<Question>()
                 .HasIndex(q => q.CourseThreadId);
+
+            modelBuilder.Entity<AppUser>()
+                .HasIndex(u => u.Username)
+                .IsUnique();
+
+            modelBuilder.Entity<QuestionVote>()
+                .HasIndex(v => new { v.UserId, v.QuestionId })
+                .IsUnique();
+
+            modelBuilder.Entity<CommentVote>()
+                .HasIndex(v => new { v.UserId, v.CommentId })
+                .IsUnique();
         }
     }
 }

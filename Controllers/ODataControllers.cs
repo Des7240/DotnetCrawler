@@ -22,6 +22,27 @@ namespace DotnetCrawler.Controllers
         {
             return Ok(_db.Subjects);
         }
+
+        [HttpGet]
+        [EnableQuery]
+        public IActionResult Get(int key)
+        {
+            var item = _db.Subjects.FirstOrDefault(s => s.Id == key);
+            if (item == null) return NotFound();
+            return Ok(item);
+        }
+
+        [HttpDelete]
+        public IActionResult Delete(int key)
+        {
+            var item = _db.Subjects.FirstOrDefault(s => s.Id == key);
+            if (item == null) return NotFound();
+
+            _db.Subjects.Remove(item);
+            _db.SaveChanges();
+
+            return NoContent();
+        }
     }
 
     public class CourseThreadsController : ODataController
@@ -39,39 +60,40 @@ namespace DotnetCrawler.Controllers
         {
             return Ok(_db.Threads);
         }
+
+        [HttpGet]
+        [EnableQuery]
+        public IActionResult Get(int key)
+        {
+            var item = _db.Threads.FirstOrDefault(t => t.Id == key);
+            if (item == null) return NotFound();
+            return Ok(item);
+        }
     }
 
     public class QuestionsController : ODataController
     {
         private readonly AppDbContext _db;
-        private readonly IConfiguration _config;
 
-        public QuestionsController(AppDbContext db, IConfiguration config)
+        public QuestionsController(AppDbContext db)
         {
             _db = db;
-            _config = config;
         }
 
         [HttpGet]
         [EnableQuery]
         public IActionResult Get()
         {
-            var storageUrl = _config["STORAGE_API_URL"]?.TrimEnd('/') ?? "";
-            var bucket = _config["STORAGE_BUCKET"] ?? "";
-            var baseUrl = $"{storageUrl}/{bucket}";
+            return Ok(_db.Questions);
+        }
 
-            var query = _db.Questions
-                .Select(q => new QuestionDto
-                {
-                    Id = q.Id,
-                    CourseThreadId = q.CourseThreadId,
-                    BestAnswer = q.BestAnswer,
-                    GeminiAnswer = q.GeminiAnswer,
-                    ImageUrl = string.IsNullOrEmpty(storageUrl) ? q.ImageUrl : $"{baseUrl}/{q.CourseThread!.Path}/{q.ImageUrl}",
-                    Comments = q.Comments
-                });
-
-            return Ok(query);
+        [HttpGet]
+        [EnableQuery]
+        public IActionResult Get(int key)
+        {
+            var item = _db.Questions.Include(q => q.Comments).FirstOrDefault(q => q.Id == key);
+            if (item == null) return NotFound();
+            return Ok(item);
         }
     }
 

@@ -2,6 +2,7 @@
 using DotnetCrawler.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -10,9 +11,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DotnetCrawler.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260611153735_AddUserAndVotes")]
+    partial class AddUserAndVotes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -210,20 +213,6 @@ namespace DotnetCrawler.Migrations
                         .IsUnique();
 
                     b.ToTable("Subjects");
-                });
-
-            modelBuilder.Entity("DotnetCrawler.Entities.SystemSetting", b =>
-                {
-                    b.Property<string>("Key")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Key");
-
-                    b.ToTable("SystemSettings");
                 });
 
             modelBuilder.Entity("DotnetCrawler.Entities.ThreadFile", b =>
