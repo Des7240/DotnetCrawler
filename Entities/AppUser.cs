@@ -13,5 +13,7 @@ namespace DotnetCrawler.Entities
 
         [Required]
         public string PasswordHash { get; set; } = string.Empty;
+
+        public bool IsApproved { get; set; } = false;
     }
 }
